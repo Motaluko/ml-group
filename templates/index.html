@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>House Price Predictor</title>
+  <style>
+     body {
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: 60px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+            letter-spacing: 1px;
+            animation: slideDown 1s ease;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+    
+        }
+
+        label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 2px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #999;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 14px;
+            background: linear-gradient(135deg, #007bff, #005fcc);
+            border: none;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            animation: fadeInUp 1s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #005fcc, #004bb5);
+            transform: scale(1.05);
+            animation: pulse 1s infinite;
+        }
+
+    
+    .error { color: #b00020; }
+    .result { color: #0a7a0a; font-weight: bold; margin-top: 12px; }
+     @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+  </style>
+</head>
+<body>
+  
+  <div class="card">
+    <h1>🏡 House Price Predictor</h1>
+
+    <form action="/predict" method="post">
+      <label>Median Income (MedInc)</label>
+      <input name="MedInc" placeholder="e.g. 3.2" />
+
+      <label>House Age (HouseAge)</label>
+      <input name="HouseAge" placeholder="e.g. 25" />
+
+      <label>Average Rooms (AveRooms)</label>
+      <input name="AveRooms" placeholder="e.g. 5.4" />
+
+      <label>Average Bedrooms (AveBedrms)</label>
+      <input name="AveBedrms" placeholder="e.g. 1.1" />
+
+      <label>Population</label>
+      <input name="Population" placeholder="e.g. 1000" />
+
+      <label>Average Occupancy (AveOccup)</label>
+      <input name="AveOccup" placeholder="e.g. 3.0" />
+
+      <label>Latitude</label>
+      <input name="Latitude" placeholder="e.g. 34.2" />
+
+      <label>Longitude</label>
+      <input name="Longitude" placeholder="e.g. -118.3" />
+
+      <br/>
+      <button type="submit">Predict Price</button>
+    </form>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if result %}
+      <p class="result">{{ result }}</p>
+    {% endif %}
+  </div>
+</body>
+</html>
+
