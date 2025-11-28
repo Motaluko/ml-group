@@ -1,47 +1,41 @@
-from flask import Flask, request, render_template
+import streamlit as st
 import joblib
 import numpy as np
 import os
 
-app = Flask(__name__)
-
 MODEL_PATH = "house_price_model.pkl"
 
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model file not found: {MODEL_PATH}. Put it in the project folder.")
+    st.error(f"Model file not found: {MODEL_PATH}. Upload it to the project folder.")
+    st.stop()
 
 model = joblib.load(MODEL_PATH)
 
-@app.route("/")
-def home():
-    return render_template("index.html", result=None, error=None)
+st.title("California House Price Prediction")
 
-@app.route("/predict", methods=["POST"])
-def predict():
+st.write("Enter the house features below:")
+
+# Input fields
+MedInc = st.number_input("Median Income", min_value=0.0)
+HouseAge = st.number_input("House Age", min_value=0.0)
+AveRooms = st.number_input("Average Rooms", min_value=0.0)
+AveBedrms = st.number_input("Average Bedrooms", min_value=0.0)
+Population = st.number_input("Population", min_value=0.0)
+AveOccup = st.number_input("Average Occupancy", min_value=0.0)
+Latitude = st.number_input("Latitude", min_value=-90.0)
+Longitude = st.number_input("Longitude", min_value=-180.0)
+
+if st.button("Predict"):
     try:
-        # Read form inputs and convert to float
         features = [
-            float(request.form["MedInc"]),
-            float(request.form["HouseAge"]),
-            float(request.form["AveRooms"]),
-            float(request.form["AveBedrms"]),
-            float(request.form["Population"]),
-            float(request.form["AveOccup"]),
-            float(request.form["Latitude"]),
-            float(request.form["Longitude"]),
+            MedInc, HouseAge, AveRooms, AveBedrms,
+            Population, AveOccup, Latitude, Longitude
         ]
+
+        pred = model.predict([features])[0]
+        predicted_price = pred * 100000
+
+        st.success(f"Predicted median house value: ${predicted_price:,.2f}")
+
     except Exception as e:
-        return render_template("index.html", result=None, error="Please enter valid numeric values for all fields.")
-
-    # Predict (model expects shape [1, n_features])
-    pred = model.predict([features])[0]
-
-    # The California dataset target is in units of 100,000 (so scale to dollars)
-    predicted_price = pred * 100000
-
-    result_text = f"Predicted median house value: ${predicted_price:,.2f}"
-    return render_template("index.html", result=result_text, error=None)
-
-if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=10000)
+        st.error("An error occurred while predicting. Please check your inputs.")
