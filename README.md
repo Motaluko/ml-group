@@ -72,8 +72,11 @@ Israel
 Augustine
 
 We successfully collaborated using Git for version control, ensuring smooth teamwork and code integration.
-🎯 Future Improvements
 
+##✨ The App
+This is the link to our Streamlit app: https://housepriceg1.streamlit.app
+
+🎯 Future Improvements
 Add feature importance visualization
 Include price confidence interval
 Deploy to Streamlit Community Cloud / Heroku / AWS
